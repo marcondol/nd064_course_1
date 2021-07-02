@@ -6,5 +6,5 @@ keywords:
 - alpine
 version: 1.0.0
 maintainers:
-- Arif
-- Cahyowibowo
+- name: Arif Cahyowibowo
+  email: marcondolx@gmail.com
