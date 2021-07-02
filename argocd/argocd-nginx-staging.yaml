@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-staging
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: exercises/helmet
+    repoURL: 'https://github.com/marcondol/nd064_course_1'
+    targetRevision: HEAD
+    chart: exercises/helmet
+    helm:
+      valueFiles:
+        - values-staging.yaml
+  project: default
