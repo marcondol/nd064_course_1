@@ -33,7 +33,7 @@ def get_posts_count():
 
 # Define the Flask application
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'this is secret'
+app.config['SECRET_KEY'] = 'this is secret loh'
 
 # Define the main route of the web application 
 @app.route('/')
