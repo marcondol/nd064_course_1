@@ -1,11 +1,16 @@
+
 ## Docker commands used to build the application 
-# TODO: insert the docker build command
+docker build -t marcondol/techtrends .
 
 ## Docker commands used to run the application
-# TODO: insert the docker run command
+docker run -p 3111:3111 marcondol/techtrends
 
 ## Docker commands used to get the application logs
-# TODO: insert the docker logs command
+docker logs 30d11b8797f115a4746ec9983d06839ef2f53d16da46a1ce9a18b28a2c51ac7e
 
 ## Logs from the container running the TechTrends application
-# TODO: paste logs from the Docker container 
+* Serving Flask app "app" (lazy loading)
+* Environment: production
+WARNING: This is a development server. Do not use it in a production deployment.
+Use a production WSGI server instead.
+* Debug mode: off
