@@ -1,13 +1,19 @@
 import sqlite3
 
-from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
+from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash,g
 from werkzeug.exceptions import abort
+import logging
+from multiprocessing import Value
+
+counter = Value('i', 0)
+
 
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
 def get_db_connection():
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
+    counter.value += 1
     return connection
 
 # Function to get a post using its ID
@@ -18,9 +24,16 @@ def get_post(post_id):
     connection.close()
     return post
 
+# Function to get a post using its ID
+def get_posts_count():
+    connection = get_db_connection()
+    post = connection.execute('SELECT * FROM posts').fetchone()
+    connection.close()
+    return len(post)
+
 # Define the Flask application
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your secret key'
+app.config['SECRET_KEY'] = 'this is secret'
 
 # Define the main route of the web application 
 @app.route('/')
@@ -38,11 +51,14 @@ def post(post_id):
     if post is None:
       return render_template('404.html'), 404
     else:
+      app.logger.info("The" + post['title'] + "page is retrieved")
       return render_template('post.html', post=post)
+      
 
 # Define the About Us page
 @app.route('/about')
 def about():
+    app.logger.info("The" + "\"About Us\"" + "page is retrieved")
     return render_template('about.html')
 
 # Define the post creation functionality 
@@ -60,11 +76,25 @@ def create():
                          (title, content))
             connection.commit()
             connection.close()
-
             return redirect(url_for('index'))
 
     return render_template('create.html')
 
+@app.route('/healthz')
+def healtz():        
+    return jsonify({
+        "result": "OK - healthy"
+    })
+
+@app.route('/metrics')
+def metrics():      
+    return jsonify({
+        "connection": counter.value,
+        "posts": get_posts_count()
+    })
+
+
 # start the application on port 3111
 if __name__ == "__main__":
+   logging.basicConfig(filename='app.log',level=logging.DEBUG)
    app.run(host='0.0.0.0', port='3111')
