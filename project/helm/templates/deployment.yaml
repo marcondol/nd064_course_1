@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: python-techtrends
+  name: python-techtrends
+  namespace: {{ .Values.namespace.name }} 
+spec:
+  replicas: {{ .Values.replicaCount }} 
+  selector:
+    matchLabels:
+      app: python-techtrends
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: python-techtrends
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullpolicy }} 
+        name: python-techtrends
+      - containerPort: 3111
+        protocol: TCP
+        livenessProbe:
+           httpGet:
+             path: /healtz
+             port: 3111
+        resources:
+          requests:
+            cpu: {{ .Values.resources.cpu }}
+            memory: {{ .Values.resources.memory }}
+          limits:
+            cpu: {{ .Values.resources.cpu_lim }}
+            memory: {{ .Values.resources.memory_lim }}

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: techtrends
+    tag: marcondol
+  name: techtrends-marcondol
+  namespace: {{ .Values.namespace.name }} 
+spec:
+  ports:
+  - port: {{ .Values.service.port }} 
+    protocol: TCP
+    targetPort: {{ .Values.service.port_targer }}
+  selector:
+    app: techtrends
+    tag: marcondol
+  type: {{ .Values.service.type }} 
