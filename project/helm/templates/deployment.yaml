@@ -23,10 +23,10 @@ spec:
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullpolicy }} 
-        name: python-techtrends      
-        protocol: TCP
+        name: python-techtrends              
         ports:
         - containerPort: 3111
+          protocol: TCP
         livenessProbe:
            httpGet:
              path: /healtz
